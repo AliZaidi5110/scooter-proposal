@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/scooter_sharing_proposal.html"
+    }
+  ]
+}
