@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scooter Sharing Software Development - Project Proposal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .controls {
+            max-width: 1200px;
+            margin: 0 auto 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-print {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-print:hover {
+            background: #f0f3ff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: white;
+            padding: 60px 50px;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 38px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .header-left p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .header-logo {
+            font-size: 70px;
+            opacity: 0.1;
+        }
+
+        /* Content */
+        .content {
+            padding: 60px 50px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a202c;
+            margin-bottom: 30px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #667eea;
+            display: inline-block;
+            letter-spacing: -0.5px;
+        }
+
+        /* Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .summary-card-label {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        .summary-card-value {
+            font-size: 32px;
+            font-weight: 800;
+            margin: 12px 0;
+        }
+
+        .summary-card-detail {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* Feature Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-left: 5px solid #667eea;
+            padding: 28px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .feature-card-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+            margin-right: 15px;
+        }
+
+        .feature-header-text {
+            flex: 1;
+        }
+
+        .feature-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 4px;
+        }
+
+        .feature-cost {
+            font-size: 20px;
+            font-weight: 800;
+            color: #667eea;
+        }
+
+        .feature-description {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        /* Table */
+        .table-section {
+            margin-top: 30px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table thead {
+            background: #1a202c;
+            color: white;
+        }
+
+        table th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+
+        table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        table tbody tr:last-child {
+            background-color: #f0f0f5;
+            border-top: 2px solid #667eea;
+            border-bottom: 2px solid #667eea;
+        }
+
+        table tbody tr:last-child td {
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        table td:last-child,
+        table th:last-child {
+            text-align: right;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, #f0f3ff 0%, #e6e9ff 100%);
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .info-box h4 {
+            color: #667eea;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .info-box p {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Highlights */
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .highlight-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .highlight-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .highlight-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a202c;
+            color: white;
+            padding: 40px 50px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .footer p {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .footer p:first-child {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+            }
+            .controls {
+                display: none;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+
+            .header {
+                padding: 40px 20px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button class="btn btn-download" onclick="downloadPDF()">📥 Download PDF</button>
+        <button class="btn btn-print" onclick="window.print()">🖨️ Print</button>
+    </div>
+
+    <div class="container" id="pdfContent">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <h1>Scooter Sharing Platform</h1>
+                <p>Complete Software Development Solution</p>
+                <p style="font-size: 13px; margin-top: 8px; opacity: 0.7;">Professional Implementation & Deployment</p>
+            </div>
+            <div class="header-logo">🛴</div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="summary-card-label">Total Investment</div>
+                    <div class="summary-card-value">£7,400</div>
+                    <div class="summary-card-detail">Complete Solution</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-label">Components Included</div>
+                    <div class="summary-card-value">10</div>
+                    <div class="summary-card-detail">Full Stack Development</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-label">Time to Deploy</div>
+                    <div class="summary-card-value">Ready</div>
+                    <div class="summary-card-detail">Production Ready</div>
+                </div>
+            </div>
+
+            <!-- Project Overview -->
+            <div class="section">
+                <h2 class="section-title">Project Overview</h2>
+                <div class="info-box">
+                    <h4>About This Solution</h4>
+                    <p>This comprehensive proposal outlines the complete development of a modern, enterprise-grade scooter sharing platform. The solution encompasses all necessary components from user-facing mobile applications to robust backend infrastructure, ensuring a fully operational, professional system ready for immediate market launch.</p>
+                </div>
+            </div>
+
+            <!-- Service Components -->
+            <div class="section">
+                <h2 class="section-title">Service Components & Features</h2>
+
+                <div class="features-grid">
+                    <!-- 1. Mobile App -->
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-icon">1</div>
+                            <div class="feature-header-text">
+                                <div class="feature-title">Mobile Application</div>
+                                <div class="feature-cost">£2,000</div>
+                            </div>
+                        </div>
+                        <div class="feature-description">Native applications for iOS and Android with comprehensive features</div>
+                        <ul class="feature-list">
+                            <li>OTP & email user authentication</li>
+                            <li>Real-time scooter map display</li>
+                            <li>QR code unlock system</li>
+                            <li>Live ride tracking (distance, time, battery, speed)</li>
+                            <li>Digital wallet & in-app payments</li>
+                            <li>Promo codes & discounts</li>
+                            <li>Ride history & invoices</li>
+                            <li>Push notifications</li>
+                            <li>Integrated help center</li>
+                        </ul>
+                    </div>
+
+                    <!-- 2. Website -->
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-icon">2</div>
+                            <div class="feature-header-text">
+                                <div class="feature-title">Website Development</div>
+                                <div class="feature-cost">£350</div>
+                            </div>
+                        </div>
+                        <div class="feature-description">Professional web presence with optimized content</div>
+                        <ul class="feature-list">
+                            <li>Professional landing page</li>
+                            <li>Service pricing page</li>
+                            <li>Comprehensive FAQ section</li>
+                            <li>App download buttons</li>
+                            <li>Contact & support page</li>
+                            <li>SEO optimization</li>
+                            <li>Admin login portal</li>
+                        </ul>
+                    </div>
+
+                    <!-- 3. Backend API -->
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-icon">3</div>
+                            <div class="feature-header-text">
+                                <div class="feature-title">Backend API System</div>
+                                <div class="feature-cost">£1,900</div>
+                            </div>
+                        </div>
+                        <div class="feature-description">Core server infrastructure with enterprise architecture</div>
+                        <ul class="feature-list">
+                            <li>Complete REST API endpoints</li>
+                            <li>Real-time WebSocket APIs</li>
+                            <li>Advanced authentication system</li>
+                            <li>Scooter status engine</li>
+                            <li>Billing calculation engine</li>
+                            <li>Payment processing engine</li>
+                            <li>Notification engine</li>
+                            <li>Database design & optimization</li>
+                            <li>Enterprise security protocols</li>
+                        </ul>
+                    </div>
+
+                    <!-- 4. Real-Time Communication -->
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-icon">4</div>
+                            <div class="feature-header-text">
+                                <div class="feature-title">Real-Time Communication</div>
+                                <div class="feature-cost">£400</div>
+                            </div>
+                        </div>
+                        <div class="feature-description">MQTT & WebSocket infrastructure for IoT management</div>
+                        <ul class="feature-list">
+                            <li>MQTT broker configuration</li>
+                            <li>Device-to-server communication</li>
+                            <li>Live GPS position updates</li>
+                            <li>Ride start/stop signals</li>
+                            <li>Anti-theft alerts</li>
+                            <li>Battery monitoring</li>
+                        </ul>
+                    </div>
+
+                    <!-- 5. KPIs System -->
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-icon">5</div>
+                            <div class="feature-header-text">
+                                <div class="feature-title">KPIs & Analytics</div>
+                                <div class="feature-cost">£200</div>
+                            </div>
+                        </div>
+                        <div class="feature-description">Comprehensive performance tracking and insights</div>
+                        <ul class="feature-list">
+                            <li>Revenue tracking</li>
+                            <li>Ride statistics</li>
+                            <li>User engagement metrics</li>
+                            <li>Battery performance trends</li>
+                            <li>User behavior insights</li>
+                            <li>Admin dashboard display</li>
+                        </ul>
+                    </div>
+
+                    <!-- 6. Admin Dashboard -->
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-icon">6</div>
+                            <div class="feature-header-text">
+                                <div class="feature-title">Admin Dashboard</div>
+                                <div class="feature-cost">£1,050</div>
+                            </div>
+                        </div>
+                        <div class="feature-description">Powerful control panel for business operations</div>
+                        <ul class="feature-list">
+                            <li>Real-time fleet tracking</li>
+                            <li>Hardware control</li>
+                            <li>Geofencing configuration</li>
+                            <li>Ride history & logs</li>
+                            <li>User management</li>
+                            <li>Payment logs</li>
+                            <li>Analytics dashboard</li>
+                            <li>Custom reports</li>
+                        </ul>
+                    </div>
+
+                    <!-- 7. Invoice Generator -->
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-icon">7</div>
+                            <div class="feature-header-text">
+                                <div class="feature-title">Invoice Generator</div>
+                                <div class="feature-cost">£250</div>
+                            </div>
+                        </div>
+                        <div class="feature-description">Automated invoice system for users and admins</div>
+                        <ul class="feature-list">
+                            <li>Professional invoice design</li>
+                            <li>Ride summary breakdown</li>
+                            <li>Distance & time calculations</li>
+                            <li>Tax calculations</li>
+                            <li>Payment method reference</li>
+                            <li>Auto PDF generation</li>
+                            <li>Email delivery</li>
+                        </ul>
+                    </div>
+
+                    <!-- 8. Payment Integration -->
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-icon">8</div>
+                            <div class="feature-header-text">
+                                <div class="feature-title">Payment Integration</div>
+                                <div class="feature-cost">£300</div>
+                            </div>
+                        </div>
+                        <div class="feature-description">Multiple secure payment gateway options</div>
+                        <ul class="feature-list">
+                            <li>Stripe integration</li>
+                            <li>PayPal support</li>
+                            <li>Apple Pay</li>
+                            <li>Google Pay</li>
+                            <li>Revolut Pay</li>
+                            <li>Credit/Debit cards</li>
+                            <li>Open Banking API</li>
+                            <li>Sandbox & live testing</li>
+                        </ul>
+                    </div>
+
+                    <!-- 9. Deployment -->
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-icon">9</div>
+                            <div class="feature-header-text">
+                                <div class="feature-title">Deployment & Infrastructure</div>
+                                <div class="feature-cost">£450</div>
+                            </div>
+                        </div>
+                        <div class="feature-description">Production-ready setup and deployment</div>
+                        <ul class="feature-list">
+                            <li>Server configuration</li>
+                            <li>Database deployment</li>
+                            <li>WebSocket server</li>
+                            <li>MQTT broker setup</li>
+                            <li>SSL certificates</li>
+                            <li>Load balancing</li>
+                            <li>Automated backups</li>
+                            <li>App Store publishing</li>
+                        </ul>
+                    </div>
+
+                    <!-- 10. Testing & QA -->
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-icon">10</div>
+                            <div class="feature-header-text">
+                                <div class="feature-title">Testing & QA</div>
+                                <div class="feature-cost">£300</div>
+                            </div>
+                        </div>
+                        <div class="feature-description">Comprehensive quality assurance and testing</div>
+                        <ul class="feature-list">
+                            <li>Mobile app testing</li>
+                            <li>Dashboard testing</li>
+                            <li>Backend API testing</li>
+                            <li>Payment testing</li>
+                            <li>IoT testing</li>
+                            <li>Performance testing</li>
+                            <li>Security audits</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost Breakdown Table -->
+            <div class="section">
+                <h2 class="section-title">Investment Breakdown</h2>
+                <div class="table-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Cost (GBP)</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Mobile Application (iOS + Android)</td>
+                                <td>£2,000</td>
+                                <td>27.0%</td>
+                            </tr>
+                            <tr>
+                                <td>Backend API System</td>
+                                <td>£1,900</td>
+                                <td>25.7%</td>
+                            </tr>
+                            <tr>
+                                <td>Admin Dashboard</td>
+                                <td>£1,050</td>
+                                <td>14.2%</td>
+                            </tr>
+                            <tr>
+                                <td>Deployment & Infrastructure</td>
+                                <td>£450</td>
+                                <td>6.1%</td>
+                            </tr>
+                            <tr>
+                                <td>Real-Time Communication (MQTT)</td>
+                                <td>£400</td>
+                                <td>5.4%</td>
+                            </tr>
+                            <tr>
+                                <td>Payment Integration</td>
+                                <td>£300</td>
+                                <td>4.1%</td>
+                            </tr>
+                            <tr>
+                                <td>Testing & Quality Assurance</td>
+                                <td>£300</td>
+                                <td>4.1%</td>
+                            </tr>
+                            <tr>
+                                <td>Website Development</td>
+                                <td>£350</td>
+                                <td>4.7%</td>
+                            </tr>
+                            <tr>
+                                <td>Invoice Generator</td>
+                                <td>£250</td>
+                                <td>3.4%</td>
+                            </tr>
+                            <tr>
+                                <td>KPIs System</td>
+                                <td>£200</td>
+                                <td>2.7%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>TOTAL PROJECT COST</strong></td>
+                                <td><strong>£7,400</strong></td>
+                                <td><strong>100%</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Key Highlights -->
+            <div class="section">
+                <h2 class="section-title">Why Choose This Solution</h2>
+                <div class="highlights-grid">
+                    <div class="highlight-item">
+                        <div class="highlight-icon">✓</div>
+                        <div class="highlight-text">Complete Solution with No Hidden Costs</div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">⚡</div>
+                        <div class="highlight-text">Production Ready & Immediately Deployable</div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">📈</div>
+                        <div class="highlight-text">Scalable Architecture for Growth</div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">🌐</div>
+                        <div class="highlight-text">Multi-Platform Support (iOS, Android, Web)</div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">🔒</div>
+                        <div class="highlight-text">Secure Payment Processing</div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">✅</div>
+                        <div class="highlight-text">Comprehensive Quality Assurance</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What's Included -->
+            <div class="section">
+                <h2 class="section-title">Package Includes</h2>
+                <div class="info-box">
+                    <ul class="feature-list" style="margin: 0;">
+                        <li>Native mobile applications for iOS and Android</li>
+                        <li>Full-featured backend API with real-time capabilities</li>
+                        <li>Professional website with SEO optimization</li>
+                        <li>Comprehensive admin control panel with analytics</li>
+                        <li>Multiple payment gateway integrations</li>
+                        <li>IoT device communication and management</li>
+                        <li>Automatic invoice generation system</li>
+                        <li>Production deployment and infrastructure setup</li>
+                        <li>App Store and Play Store publishing</li>
+                        <li>Comprehensive testing and quality assurance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Scooter Sharing Platform • Complete Development Solution</p>
+            <p>All Features Included • Production Ready • Enterprise Grade</p>
+        </div>
+    </div>
+
+    <script>
+        function downloadPDF() {
+            try {
+                const element = document.getElementById('pdfContent');
+                const opt = {
+                    margin: 8,
+                    filename: 'Scooter-Sharing-Software-Proposal.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, logging: false, useCORS: true, allowTaint: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                
+                html2pdf().set(opt).from(element).save().catch(function(error) {
+                    console.error('PDF Download Error:', error);
+                    alert('There was an error downloading the PDF. Please try printing instead using the Print button.');
+                });
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Download failed. Please use the Print option instead.');
+            }
+        }
+    </script>
+</body>
+</html>
